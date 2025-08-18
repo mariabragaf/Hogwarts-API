@@ -45,7 +45,44 @@ app.get('/bruxos', (req,res) => {
     res.json (bruxos);
 });
 
+//Rota do bruxo por ID
+app.get('/bruxos/:id',(req, res) => {
+  const bruxoId = parseInt(req.params.id, 10);
+  const bruxo = bruxos.find(b => b.id === bruxoId);
 
+  if (bruxo) {
+    res.json(bruxo);
+  } else {
+    res.status(404).send('Bruxo não encontrado!🧙‍♂️❌');
+  }
+});
+
+//Rota do bruxo pelo nome
+app.get("/bruxos/nome/:nome", (req, res) => {
+    let nome = req.params.nome.toLowerCase();
+    const bruxosEncontrados = bruxos.filter(b => 
+        b.nome.toLowerCase().includes(nome)
+    );
+    if (bruxosEncontrados.length > 0) {
+        res.status(200).json(bruxosEncontrados);
+    } else {
+        res.status(404).json({
+            mensagem: "Bruxo(s) nao encontrado(s)!"
+      })
+     }
+});
+
+app.get("/bruxos/casa/:casa", (req, res) => {
+    let casa = req.params.casa;
+    const bruxosDaCasa = bruxos.filter(b => b.casa.toLowerCase() === casa.toLowerCase());
+    if (bruxosDaCasa.length > 0) {
+        res.status(200).json(bruxosDaCasa);
+    } else {
+        res.status(404).json({
+            mensagem: "Nenhum bruxo encontrado nessa casa!"
+        })
+    }
+});
 
 // Iniciar servidor
 app.listen(serverPort, () => {
