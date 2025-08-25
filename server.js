@@ -1,7 +1,9 @@
 import express from "express";
 import bruxos from "./src/data/bruxos.js"
+import dados from "./src/data/dados.js"
 
 const serverPort = 3000;
+const {varinhas, pocoes, animais} = dados;
 const app = express();
 
 app.use(express.json());
@@ -72,6 +74,7 @@ app.get("/bruxos/nome/:nome", (req, res) => {
      }
 });
 
+//Rota do bruxo pela casa
 app.get("/bruxos/casa/:casa", (req, res) => {
     let casa = req.params.casa;
     const bruxosDaCasa = bruxos.filter(b => b.casa.toLowerCase() === casa.toLowerCase());
@@ -82,6 +85,57 @@ app.get("/bruxos/casa/:casa", (req, res) => {
             mensagem: "Nenhum bruxo encontrado nessa casa!"
         })
     }
+});
+
+// Rota do bruxo pela varinha
+app.get("/varinhas", (req, res) => {
+  res.json(varinhas);
+});
+
+//Rota da varinha por ID
+app.get('/varinhas/:id',(req, res) => {
+  const varinhaId = parseInt(req.params.id, 10);
+  const varinha = varinhas.find(v => v.id === varinhaId);
+
+  if (varinha) {
+    res.json(varinha);
+  } else {
+    res.status(404).send('Varinha não encontrada!🪄❌');
+  }
+});
+
+//Rota do bruxo pelo animal
+app.get("/animais", (req, res) => {
+  res.json(animais);
+});
+
+//Rota do animal por ID
+app.get('/animais/:id',(req, res) => {
+  const animalId = parseInt(req.params.id, 10);
+  const animal = animais.find(a => a.id === animalId);
+
+  if (animal) {
+    res.json(animal);
+  } else {
+    res.status(404).send('Animal não encontrado!🦁❌');
+  }
+});
+
+//Rota do bruxo pela pocao
+app.get("/pocoes", (req, res) => {
+  res.json(pocoes);
+});
+
+//Rota das pocoes por ID
+app.get('/pocoes/:id',(req, res) => {
+  const pocaoId = parseInt(req.params.id, 10);
+  const pocao = pocoes.find(p => p.id === pocaoId);
+
+  if (pocao) {
+    res.json(pocao);
+  } else {
+    res.status(404).send('Poção não encontrada!🍷❌');
+  }
 });
 
 // Iniciar servidor
